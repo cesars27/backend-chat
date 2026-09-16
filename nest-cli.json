@@ -1,0 +1,12 @@
+nano nest-cli.json
+nano .env
+nano package.json
+mkdir -p src
+nano src/main.ts
+nano src/app.module.ts
+mkdir -p src/conversations/entities
+nano src/conversations/conversations.module.ts
+nano src/conversations/entities/conversation.entity.ts
+nano src/conversations/entities/message.entity.ts
+nano src/conversations/conversations.service.ts
+nano src/conversations/conversations.controller.ts

@@ -1,0 +1,58 @@
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Conversation } from './entities/conversation.entity';
+import { Message } from './entities/message.entity';
+
+@Injectable()
+export class ConversationsService {
+  constructor(
+    @InjectRepository(Conversation)
+    private convRepo: Repository<Conversation>,
+    @InjectRepository(Message)
+    private msgRepo: Repository<Message>,
+  ) {}
+
+  async create(userName: string, userPhone: string) {
+    const conv = this.convRepo.create({ user_name: userName, user_phone: userPhone });
+    return this.convRepo.save(conv);
+  }
+
+  async addMessage(conversationId: number, text: string, sender: 'user' | 'agent') {
+    const conv = await this.convRepo.findOne({ where: { id: conversationId } });
+    if (!conv) throw new NotFoundException('Conversación no encontrada');
+    const msg = this.msgRepo.create({ conversation_id: conversationId, text, sender });
+    return this.msgRepo.save(msg);
+  }
+
+  async findAll() {
+    return this.convRepo.find({
+      order: { created_at: 'DESC' },
+      relations: { messages: true },
+    });
+  }
+
+  async findOne(id: number) {
+    const conv = await this.convRepo.findOne({
+      where: { id },
+      relations: { messages: true },
+      order: { messages: { created_at: 'ASC' } },
+    });
+    if (!conv) throw new NotFoundException('Conversación no encontrada');
+    return conv;
+  }
+
+  async close(id: number) {
+    const conv = await this.convRepo.findOne({ where: { id } });
+    if (!conv) throw new NotFoundException('Conversación no encontrada');
+    conv.status = 'closed';
+    return this.convRepo.save(conv);
+  }
+
+  async assign(id: number, agentName: string) {
+    const conv = await this.convRepo.findOne({ where: { id } });
+    if (!conv) throw new NotFoundException('Conversación no encontrada');
+    conv.assigned_to = agentName;
+    return this.convRepo.save(conv);
+  }
+}
