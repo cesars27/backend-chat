@@ -12,6 +12,9 @@ export class Conversation {
   @Column({ name: 'user_phone', default: '' })
   userPhone: string;
 
+  @Column({ name: 'user_ip', nullable: true })
+  userIp: string;
+
   @Column({ default: 'open' })
   status: 'open' | 'closed';
 
