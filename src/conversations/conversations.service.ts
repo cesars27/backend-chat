@@ -15,7 +15,6 @@ export class ConversationsService {
 
   // Crear conversación con ID base 101
   async create(userName: string, userPhone: string, userIp: string) {
-    // Obtener el máximo ID actual
     const lastConv = await this.convRepo.find({ order: { id: 'DESC' }, take: 1 });
     let newId = 101;
     if (lastConv.length > 0 && lastConv[0].id >= 101) {
@@ -34,7 +33,12 @@ export class ConversationsService {
   async addMessage(conversationId: number, text: string, sender: 'user' | 'agent', agentName?: string) {
     const conv = await this.convRepo.findOne({ where: { id: conversationId } });
     if (!conv) throw new NotFoundException('Conversación no encontrada');
-    const msg = this.msgRepo.create({ conversationId, text, sender, agentName: agentName || null });
+    const msg = this.msgRepo.create({ 
+      conversationId, 
+      text, 
+      sender, 
+      agentName: agentName || undefined 
+    });
     return this.msgRepo.save(msg);
   }
 
@@ -76,7 +80,6 @@ export class ConversationsService {
   async remove(id: number) {
     const conv = await this.convRepo.findOne({ where: { id } });
     if (!conv) throw new NotFoundException('Conversación no encontrada');
-    // Eliminar primero los mensajes (por la foreign key)
     await this.msgRepo.delete({ conversationId: id });
     await this.convRepo.remove(conv);
     return { deleted: true, id };

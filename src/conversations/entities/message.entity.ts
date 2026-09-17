@@ -15,7 +15,7 @@ export class Message {
   @Column()
   sender: 'user' | 'agent';
 
-  @Column({ name: 'agent_name', nullable: true })
+  @Column({ name: 'agent_name', type: 'varchar', nullable: true })
   agentName: string | null;
 
   @CreateDateColumn({ name: 'created_at' })

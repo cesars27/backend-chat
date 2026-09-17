@@ -6,20 +6,20 @@ export class Conversation {
   @PrimaryColumn()
   id: number;
 
-  @Column({ name: 'user_name' })
+  @Column({ name: 'user_name', type: 'varchar' })
   userName: string;
 
-  @Column({ name: 'user_phone', default: '' })
+  @Column({ name: 'user_phone', type: 'varchar', default: '' })
   userPhone: string;
 
-  @Column({ name: 'user_ip', nullable: true })
-  userIp: string;
+  @Column({ name: 'user_ip', type: 'varchar', nullable: true })
+  userIp: string | null;
 
   @Column({ default: 'open' })
   status: 'open' | 'closed';
 
-  @Column({ name: 'assigned_to', nullable: true })
-  assignedTo: string;
+  @Column({ name: 'assigned_to', type: 'varchar', nullable: true })
+  assignedTo: string | null;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
