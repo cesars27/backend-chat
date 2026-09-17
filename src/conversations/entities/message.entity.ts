@@ -16,7 +16,7 @@ export class Message {
   sender: 'user' | 'agent';
 
   @Column({ name: 'agent_name', nullable: true })
-  agentName: string;
+  agentName: string | null;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
