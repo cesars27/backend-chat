@@ -6,23 +6,23 @@ export class Conversation {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  user_name: string;
+  @Column({ name: 'user_name' })
+  userName: string;
 
-  @Column()
-  user_phone: string;
+  @Column({ name: 'user_phone', default: '' })
+  userPhone: string;
 
   @Column({ default: 'open' })
   status: 'open' | 'closed';
 
-  @Column({ nullable: true })
-  assigned_to: string;
+  @Column({ name: 'assigned_to', nullable: true })
+  assignedTo: string;
 
-  @CreateDateColumn()
-  created_at: Date;
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
 
-  @UpdateDateColumn()
-  updated_at: Date;
+  @UpdateDateColumn({ name: 'updated_at' })
+  updatedAt: Date;
 
   @OneToMany(() => Message, (msg) => msg.conversation)
   messages: Message[];

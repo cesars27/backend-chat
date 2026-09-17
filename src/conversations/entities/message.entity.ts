@@ -6,19 +6,22 @@ export class Message {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  conversation_id: number;
+  @Column({ name: 'conversation_id' })
+  conversationId: number;
 
-  @Column('text')
+  @Column()
   text: string;
 
-  @Column({ type: 'enum', enum: ['user', 'agent'] })
+  @Column()
   sender: 'user' | 'agent';
 
-  @CreateDateColumn()
-  created_at: Date;
+  @Column({ name: 'agent_name', nullable: true })
+  agentName: string;
 
-  @ManyToOne(() => Conversation, (conv) => conv.messages, { onDelete: 'CASCADE' })
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
+
+  @ManyToOne(() => Conversation, (conv) => conv.messages)
   @JoinColumn({ name: 'conversation_id' })
   conversation: Conversation;
 }

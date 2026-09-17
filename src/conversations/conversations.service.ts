@@ -14,20 +14,25 @@ export class ConversationsService {
   ) {}
 
   async create(userName: string, userPhone: string) {
-    const conv = this.convRepo.create({ user_name: userName, user_phone: userPhone });
+    const conv = this.convRepo.create({ userName, userPhone });
     return this.convRepo.save(conv);
   }
 
-  async addMessage(conversationId: number, text: string, sender: 'user' | 'agent') {
+  async addMessage(conversationId: number, text: string, sender: 'user' | 'agent', agentName?: string) {
     const conv = await this.convRepo.findOne({ where: { id: conversationId } });
     if (!conv) throw new NotFoundException('Conversación no encontrada');
-    const msg = this.msgRepo.create({ conversation_id: conversationId, text, sender });
+    const msg = this.msgRepo.create({ 
+      conversationId, 
+      text, 
+      sender,
+      agentName: agentName || null,
+    });
     return this.msgRepo.save(msg);
   }
 
   async findAll() {
     return this.convRepo.find({
-      order: { created_at: 'DESC' },
+      order: { createdAt: 'DESC' },
       relations: { messages: true },
     });
   }
@@ -36,7 +41,7 @@ export class ConversationsService {
     const conv = await this.convRepo.findOne({
       where: { id },
       relations: { messages: true },
-      order: { messages: { created_at: 'ASC' } },
+      order: { messages: { createdAt: 'ASC' } },
     });
     if (!conv) throw new NotFoundException('Conversación no encontrada');
     return conv;
@@ -52,7 +57,7 @@ export class ConversationsService {
   async assign(id: number, agentName: string) {
     const conv = await this.convRepo.findOne({ where: { id } });
     if (!conv) throw new NotFoundException('Conversación no encontrada');
-    conv.assigned_to = agentName;
+    conv.assignedTo = agentName;
     return this.convRepo.save(conv);
   }
 }
