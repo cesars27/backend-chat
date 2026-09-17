@@ -4,7 +4,6 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   
-  // CORS configurado para permitir tu Frontend en Hostinger
   app.enableCors({
     origin: [
       'https://lightblue-grouse-772536.hostingersite.com',
@@ -19,6 +18,6 @@ async function bootstrap() {
   
   const port = process.env.PORT || 3000;
   await app.listen(port);
-  console.log(`🚀 Backend corriendo en puerto ${port}`);
+  console.log(`🚀 Tino Backend corriendo en puerto ${port}`);
 }
 bootstrap();
