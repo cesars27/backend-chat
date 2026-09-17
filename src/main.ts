@@ -6,6 +6,8 @@ async function bootstrap() {
   
   app.enableCors({
     origin: [
+      'https://compraysuma.com',
+      'https://www.compraysuma.com',
       'https://lightblue-grouse-772536.hostingersite.com',
       'https://lightskyblue-quetzal-821939.hostingersite.com',
       'http://localhost:5173',
